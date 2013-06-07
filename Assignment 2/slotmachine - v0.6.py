@@ -1,4 +1,4 @@
-# Source File Name: slotmachine - v0.6.py
+#Source File Name: slotmachine - v0.6.py
 # Author's Name: Jesse Higgins
 # Last Modified By: Jesse Higgins
 # Date Last Modified: Thursday June 6th, 2013
@@ -95,7 +95,7 @@ def main():
     Player_Money = 1000
     Jack_Pot = 500
     Turn = 1
-    Bet = 5
+    Bet = 10
     Prev_Bet=0
     win_number = 0
     loss_number = 0
@@ -134,6 +134,7 @@ def main():
     labelBet = Label(300, 425, str(Bet), 72)
     labelCashWin = Label(430, 425, str(cashWin), 72)
     labelNoMoney = Label(-200, -200, "Not Enough Money!", 35)
+    labelJackpot = Label(255, 75, "Jackpot: " + str(Jack_Pot), 40)
     
     #create instance of spin button and position it
     spinButton = Button(526, 548, 'Buttons/spinButton1.png')
@@ -157,7 +158,7 @@ def main():
     reel3 = ReelImage(470,115, 'ReelImages/blank.png')
 
     #group sprites together
-    allSprites = pygame.sprite.Group(reel,reel2,reel3,labelNoMoney, labelMoney, labelBet, labelCashWin, spinButton, betOneButton, maxBetButton, cashOutButton, resetButton)
+    allSprites = pygame.sprite.Group(reel,reel2,reel3,labelNoMoney,labelJackpot,labelMoney, labelBet, labelCashWin, spinButton, betOneButton, maxBetButton, cashOutButton, resetButton)
 
     #SPIN BUTTON ATTRIBUTES - COLLISION DETECTION
     spinButton_x = spinButton.rect.x
@@ -271,6 +272,7 @@ def main():
 
                     #stop the sound if its playing so they dont overlap
                     sounds[0].stop()
+                    sounds[1].stop()
                     #then play it again
                     sounds[0].play()
 
@@ -299,6 +301,7 @@ def main():
                             
                             labelMoney.text = str(Player_Money)
                             labelCashWin.text = str(cashWin)
+                            labelJackpot.text = "Jackpot: " + str(Jack_Pot)
                             if win:
                                 labelNoMoney.text = "YOU WON!"
                                 labelNoMoney.changeLocation(275,350)
@@ -320,6 +323,7 @@ def main():
                             #display the users money and cashwin if there is any
                             labelMoney.text = str(Player_Money)
                             labelCashWin.text = str(cashWin)
+                            labelJackpot.text = "Jackpot: " + str(Jack_Pot)
                             if win:
                                 labelNoMoney.text = "YOU WON!!"
                                 labelNoMoney.changeLocation(275, 350)
@@ -331,7 +335,7 @@ def main():
                         Bet += 5
                         labelBet.text = str(Bet)
                     else: #once it reaches 100 we reset it back to 5
-                        Bet = 5
+                        Bet = 10
                         labelBet.text = str(Bet)
                 #set bet to 100 if not already when
                 #mouse is over the maxbet button
@@ -352,7 +356,7 @@ def main():
                     Player_Money = 1000
                     Jack_Pot = 500
                     Turn = 1
-                    Bet = 5
+                    Bet = 10
                     Prev_Bet=0
                     win_number = 0
                     loss_number = 0
@@ -363,6 +367,7 @@ def main():
                     labelCashWin.text = str(cashWin)
                     labelNoMoney.text = "Not Enough Money!"
                     labelNoMoney.changeLocation(-200,-200)
+                    labelJackpot.text = "Jackpot: " + str(Jack_Pot)
 
                     reel.changeImage("ReelImages/blank.png")
                     reel2.changeImage("ReelImages/blank.png")
@@ -439,6 +444,7 @@ def pullthehandle(Bet, Player_Money, Jack_Pot, cashWin, reel, reel2, reel3, winS
  
     
     Jack_Pot += (int(Bet*.15)) # 15% of the player's bet goes to the jackpot
+    print str(Jack_Pot)
     win = False
     Fruit_Reel = Reels()
     Fruits = Fruit_Reel[0] + " - " + Fruit_Reel[1] + " - " + Fruit_Reel[2]
@@ -497,7 +503,7 @@ def pullthehandle(Bet, Player_Money, Jack_Pot, cashWin, reel, reel2, reel3, winS
             cashWin = Jack_Pot + winnings
             Jack_Pot = 500
         elif jackpot_try != jackpot_win:
-            print ("You did not win the Jackpot this time. \nPlease try again ! \n")
+            print ("You did not win the Jackpot this time. \nPlease try again ! \n" + str(Jack_Pot))
     # No win
     else:
         print(Fruits + "\nPlease try again. \n")
