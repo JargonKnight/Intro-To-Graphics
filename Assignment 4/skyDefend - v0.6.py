@@ -157,7 +157,7 @@ class Background(pygame.sprite.Sprite):
 class Scoreboard(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.lives = 1
+        self.lives = 5
         self.score = 0
         self.font = pygame.font.SysFont("None", 50)
         
@@ -402,7 +402,7 @@ def endGame(score, plane, scoreboard, bgImage):
     "",
     "                          *!* ~Sky Defender~ *!*",
     "",
-    "                               Last Score: %d" % score ,
+    "                               Final Score: %d" % score ,
     "",
     "",
     "",
