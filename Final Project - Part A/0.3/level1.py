@@ -319,7 +319,7 @@ class livesImage(pygame.sprite.Sprite):
         
 
 
-def decreaseLives(livesSprite, scoreboard, keepGoing):
+def decreaseLives(livesSprite, scoreboard):
     x = 85
     scoreboard.lives -= 1
             
@@ -396,6 +396,7 @@ def main():
     coin2 = Coins(200, 300)
     coin3 = Coins(750, 25)
     coin4 = Coins(750, 500)
+    coin5 = Coins(500, 800)
     
     
     Squish = pygame.mixer.Sound("FroggerSounds/Squish.ogg")
@@ -414,7 +415,7 @@ def main():
     allGrass = pygame.sprite.Group(grass1, grass2, grass3)
     allLabels = pygame.sprite.Group(label)
     allWalls = pygame.sprite.Group(wall1, wall2, wall3, wall4)
-    allCoins = pygame.sprite.Group(coin1)
+    allCoins = pygame.sprite.Group(coin1, coin2, coin3, coin4, coin5)
     livesSprite = pygame.sprite.Group()
     scoreboardSprite = pygame.sprite.Group(scoreboard)
 
@@ -437,21 +438,21 @@ def main():
             Squish.play()
             frogger.rect.centery = 600
 
-            decreaseLives(livesSprite, scoreboard, keepGoing)
+            decreaseLives(livesSprite, scoreboard)
 
  
         if pygame.sprite.spritecollide(frogger, allHumans, False):
             Squish.play()
             frogger.rect.centery = 600
 
-            decreaseLives(livesSprite, scoreboard, keepGoing)
+            decreaseLives(livesSprite, scoreboard)
 
             
         if pygame.sprite.spritecollide(frogger, allWater, False):
             Splash.play()
             frogger.rect.centery = 600
 
-            decreaseLives(livesSprite, scoreboard, keepGoing)
+            decreaseLives(livesSprite, scoreboard)
                 
         for human in pygame.sprite.groupcollide(allHumans, allGrass, False, False):
             for grass in pygame.sprite.groupcollide(allGrass, allHumans, False, False):
