@@ -1,10 +1,14 @@
+#this is the mainmenu file
 import pygame, sys
 pygame.init()
 pygame.mixer.init()
 
+#initialize the screen
 screen = pygame.display.set_mode((1000, 640))
 
-
+#create a class for random design instances
+#a picture, and an x and y position will be needed for where you want it
+#placed on the screen
 class Design(pygame.sprite.Sprite):
     def __init__(self, pic, posx, posy):
         pygame.sprite.Sprite.__init__(self)
@@ -13,7 +17,8 @@ class Design(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = posx
         self.rect.centery = posy
-    
+
+#a cursor class so the menu screen isnt so boring   
 class Cursor(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -23,7 +28,8 @@ class Cursor(pygame.sprite.Sprite):
                
     def update(self):
         self.rect.center = pygame.mouse.get_pos()
- 
+
+
 def mainmenu():
     
     pygame.display.set_caption("Leapy")
@@ -33,13 +39,16 @@ def mainmenu():
     background.fill((0, 0, 0))
     screen.blit(background, (0,0))
 
+    #create instances of the menu with titels and images
+    #for a friendly interface
     gametitle = Design("MainMenu/FroggerAdventures.gif", 500, 50)
     picture = Design("MainMenu/FROGGER.gif", 175,340)
     start = Design("MainMenu/FroggerStart.gif", 500, 300)
     instructions = Design("MainMenu/FroggerInstructions.gif", 500, 400)
     leaf = Design("MainMenu/FroggerLeaf.gif", 800, 200)
     cursor = Cursor()
-    
+
+    #group all the sprites
     allSprites = pygame.sprite.Group(gametitle, picture, start, instructions, leaf)
     allCursors = pygame.sprite.Group(cursor)
     
@@ -55,7 +64,11 @@ def mainmenu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-            
+
+            #if the user clicks and the cursor is colliding with the start
+            #button, then we stop the menu tune and exit the loop
+            #causing the level value returned to the project file
+            #in which the loop will then fire the first level
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.rect.colliderect(start.rect):
                     MenuTune.stop()

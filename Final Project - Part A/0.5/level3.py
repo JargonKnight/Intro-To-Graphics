@@ -5,6 +5,11 @@ pygame.mixer.init()
 
 screen = pygame.display.set_mode((1000, 640))
 
+#a car class for the car sprites in this level
+#to instantiate, the user will pass in a filename, its Y position
+#and a direction
+# the direction will determine which side of the screen the car
+#sprite starts from
 class Cars(pygame.sprite.Sprite):
     def __init__(self, pic, direction, posy):
         pygame.sprite.Sprite.__init__(self)
@@ -56,7 +61,7 @@ class Frogger(pygame.sprite.Sprite):
         self.animation = True
         self.direction = ""
       
-        
+    #loading the images into their own arrays
     def loadImages(self):
         self.imageStand = pygame.image.load("FroggerJump/Frogger_Right0.gif")
         
@@ -93,7 +98,9 @@ class Frogger(pygame.sprite.Sprite):
             self.counter = 100
             self.dy = 3
             self.dx = 4
-            
+
+    #the update will take the keyboard input and iterate through the
+    #corresponding array of images to represent the motion of Leapy
     def update(self):
         Jump = pygame.mixer.Sound("FroggerSounds/FroggerJump.ogg")
         self.counter +=4
@@ -179,7 +186,7 @@ class Frogger(pygame.sprite.Sprite):
             self.rect.center = (self.rect.centerx, (screen.get_height() - 18))
 
 
-                
+#other classes for the level design
 class Road(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
@@ -216,7 +223,9 @@ class Label(pygame.sprite.Sprite):
         if self.counter > 60:
             self.text = ""
         
-        
+#sewers will be the collective object in this level
+# and the loadimages and update will load the images into
+#an array and then iterate them to represent motion during the level
 class Sewers(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
@@ -250,7 +259,9 @@ class Sewers(pygame.sprite.Sprite):
             self.image = self.imagesSewers[self.frame]
             self.counter = 0
 
-
+#citygirl and citychef will take the same idea as Leapy and Sewers
+#and load images accordingly, but the update will move them
+#up and down the screen and reset accordingly
 class CityGirl(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
@@ -348,7 +359,8 @@ class livesImage(pygame.sprite.Sprite):
         self.rect.center = (posx, 20)
         
 
-
+#takes the sprites form the livesSprite group and the scoreboard
+#lives and re populates the group to how many lives Leapy now has
 def decreaseLives(livesSprite, scoreboard):
     x = 85
     scoreboard.lives -= 1
@@ -380,6 +392,7 @@ def main():
     counter = 0
     x = 85
 
+    #create all the instances of the level
     bgImage = Background("Resources/houseBackground.png", 0,0)
     bgImage2 = Background("Resources/street2.png", 0, 320)
     crossing = Background("Resources/streetcrossing.png", 1100, 320)
@@ -408,7 +421,7 @@ def main():
     sewer7 = Sewers(1175, 585)
     sewer8 = Sewers(1375, 490)
     
-    
+    #create the noises
     Horn = pygame.mixer.Sound("FroggerSounds/horn.ogg")
     Squish = pygame.mixer.Sound("FroggerSounds/Squish.ogg")
     BgMusic = pygame.mixer.Sound("FroggerSounds/bgMusicLevel2.ogg")
@@ -417,6 +430,7 @@ def main():
     BgMusic.play(-1)
     bgMusic2.play(-1)
 
+    #group all the sprites accordingly
     allSprites = pygame.sprite.OrderedUpdates(sidewalk,sidewalk2, bgImage, bgImage2, crossing)        
     allcityCars = pygame.sprite.Group(citycar1, citycar2)
     allcityFolk = pygame.sprite.Group(citygirl1, citychef1)
@@ -427,6 +441,7 @@ def main():
     scoreboardSprite = pygame.sprite.Group(scoreboard)
 
 
+    #populate the lives Leapy has
     for i in range (scoreboard.lives):
         lives = livesImage(x + 50)
         livesSprite.add(lives)#add each lives sprite to its group
@@ -444,7 +459,7 @@ def main():
                 bgMusic2.stop()
                 keepGoing = False
                 
-                
+        #check for collisions between the cars and Leapy
         if pygame.sprite.spritecollide(frogger, allcityCars, False):
             Squish.play()
             Horn.play()
@@ -452,6 +467,7 @@ def main():
 
             decreaseLives(livesSprite, scoreboard)
 
+        #check for collision between the pedestrians and Leapy
         if pygame.sprite.spritecollide(frogger, allcityFolk, False):
             Squish.play()
             frogger.rect.center = (20, 490)
@@ -459,34 +475,45 @@ def main():
             decreaseLives(livesSprite, scoreboard)
           
 
+        #we always check for collision between Leapy and the sewers
         for sewer in pygame.sprite.spritecollide(frogger,allSewers, False, False):
 
+            #we remove the sewer that Leapy collides with and check
+            #if there are anymore in the group
             allSewers.remove(sewer)
             sewerCollect.play()
-            print pygame.sprite.Group.sprites(allSewers)
 
+            #if there is no more, we get rid of all other sprites
             if pygame.sprite.Group.sprites(allSewers) == []:
                 for car in pygame.sprite.Group(allcityCars):
                     allcityCars.remove(car)
                 for person in pygame.sprite.Group(allcityFolk):
                     allcityFolk.remove(person)                   
                 
-
+        #the only way this level ends is when Leapy walks off the far right
+        #side of the screen and so we check when he gets there
+        #if the sewers are all gone and if so, then we stop the level
         if frogger.rect.right >= screen.get_width():
             if pygame.sprite.Group.sprites(allSewers) == []:
                 level = -1
                 BgMusic.stop()
                 bgMusic2.stop()
                 keepGoing = False
+            #if there are still sewers, we dont allow leapy to leave the screen
             else:
                 frogger.rect.centerx = (screen.get_width() - 15)
-        
+
+        #if Leapys lives reach 0, we end the game and go to gameover screen
+        #by returning the level value of -1
+        #because the project file runs the loop while Level > 0
         if scoreboard.lives == 0:
             level = -1
             BgMusic.stop()
             bgMusic2.stop()
             keepGoing = False
 
+        #we get the screen to scroll by checking Leapys position
+        # and moving every other sprite with Leapy
         if frogger.rect.centerx >= 500:
             
             if bgImage.rect.right > 1000:
@@ -508,7 +535,7 @@ def main():
                 for cityPerson in pygame.sprite.Group(allcityFolk):
                     cityPerson.rect.centerx += 5
                 
- 
+        #avoids collision with chef sprite and car sprites
         if citychef1.rect.centery >= 265 and citychef1.rect.centery <= 415:
             if citycar2.rect.left > crossing.rect.right:
                 citycar2.rect.left = crossing.rect.right + 400

@@ -336,13 +336,13 @@ def main():
     counter = 0
     x = 85
     
-    animal1 = Animals("FroggerEnemies/FroggerGator0_right.gif", "right", 175)
-    animal2 = Animals("FroggerEnemies/FroggerGator0_right.gif", "right", 400)
-    animal3 = Animals("FroggerEnemies/FroggerGator0_left.gif", "left", 500)
-    animal4 = Animals("FroggerEnemies/FroggerGator0_left.gif", "left", 35)
-    human1 = Animals("FroggerEnemies/LawnMower0_left.gif", "left", 350)
-    human2 = Animals("FroggerEnemies/LawnMower0_right.gif", "right", 225)
-    human3 = Animals("FroggerEnemies/LawnMower0_left.gif", "left", 450)
+    animal1 = Animals("FroggerEnemies/FroggerGator0_right.png", "right", 175)
+    animal2 = Animals("FroggerEnemies/FroggerGator0_right.png", "right", 400)
+    animal3 = Animals("FroggerEnemies/FroggerGator0_left.png", "left", 500)
+    animal4 = Animals("FroggerEnemies/FroggerGator0_left.png", "left", 35)
+    human1 = Animals("FroggerEnemies/LawnMower0_left.png", "left", 350)
+    human2 = Animals("FroggerEnemies/LawnMower0_right.png", "right", 225)
+    human3 = Animals("FroggerEnemies/LawnMower0_left.png", "left", 450)
     
     water = Water(-5, 100)
     water2 = Water(100, 100)
