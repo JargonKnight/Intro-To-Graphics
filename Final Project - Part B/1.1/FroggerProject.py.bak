@@ -1,0 +1,21 @@
+""" basicSprite.py
+works just like moveBox.py from previous chapter
+but now uses a sprite """
+
+import pygame, mainmenu, level1, level2
+pygame.init()
+pygame.mixer.init()
+
+
+
+
+
+if __name__ == "__main__":
+    level = mainmenu.mainmenu()
+    if level == 1:
+        level1.main()
+    if level == 2:
+        level2.main()
+
+
+        
